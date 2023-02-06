@@ -23,15 +23,23 @@ codegen:
 
 
 typegen:
-	@npx squid-substrate-typegen typegen.json
+	@npx squid-evm-typegen src/abi abi/*.json --clean
 
 
 up:
 	@docker-compose up -d
 
 
+up-local-archive:
+	@docker compose -f docker-compose.archive.yml up -d
+
+
 down:
 	@docker-compose down
+
+
+down-local-archive:
+	@docker compose -f docker-compose.archive.yml down
 
 
 .PHONY: build serve process migrate codegen typegen up down
