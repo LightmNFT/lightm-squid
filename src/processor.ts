@@ -23,7 +23,7 @@ import {
 import { constants } from "ethers";
 import { getAddress } from "ethers/lib/utils";
 
-const isProduction = process.env.NODE_ENV === "production";
+const isDev = process.env.NODE_ENV === "development";
 
 const FACTORY_ADDRESS = "0x1A2E0E5db589f44bDA45a7E8e38054a65b0eb946";
 const FACTORY_ADDRESS_LOCAL = "0x314be53209C813CAFC066EF4d9a5CE6fec5Bd7b4";
@@ -32,7 +32,7 @@ const START_BLOCK = 3_650_000;
 const START_BLOCK_LOCAL = 0;
 
 const factoryContractAddress = (
-  isProduction ? FACTORY_ADDRESS : FACTORY_ADDRESS_LOCAL
+  !isDev ? FACTORY_ADDRESS : FACTORY_ADDRESS_LOCAL
 ).toLowerCase();
 
 const { LightmCollectionCreated, LightmCatalogDeployed } =
@@ -50,7 +50,7 @@ const processor = new EvmBatchProcessor()
   .setDataSource({
     // uncomment and set RPC_ENDPOONT to enable contract state queries.
     // Both https and wss endpoints are supported.
-    chain: isProduction
+    chain: !isDev
       ? process.env.RPC_ENDPOINT
       : process.env.RPC_ENDPOINT_LOCAL,
 
@@ -59,9 +59,9 @@ const processor = new EvmBatchProcessor()
     // For a full list of supported networks and config options
     // see https://docs.subsquid.io/develop-a-squid/evm-processor/configuration/
 
-    archive: isProduction ? lookupArchive("moonbase") : "http://localhost:8080",
+    archive: !isDev ? lookupArchive("moonbase") : "http://localhost:8080",
   })
-  .setBlockRange({ from: isProduction ? START_BLOCK : START_BLOCK_LOCAL })
+  .setBlockRange({ from: !isDev ? START_BLOCK : START_BLOCK_LOCAL })
   .addLog(factoryContractAddress, {
     filter: [[LightmCollectionCreated.topic, LightmCatalogDeployed.topic]],
     data: {

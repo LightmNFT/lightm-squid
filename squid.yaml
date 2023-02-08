@@ -1,8 +1,8 @@
 manifestVersion: subsquid.io/v0.1
-name: evm-template
+name: lightm-nft-squid
 version: 1
 description: |-
-  The very first evm squid from manifest  
+  The squid for lightm NFTs
 build:
 
 deploy:
