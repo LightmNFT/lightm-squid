@@ -6,6 +6,8 @@ description: |-
 build:
 
 deploy:
+  secrets:
+    - RPC_ENDPOINT
   addons:
     postgres:
   processor:
