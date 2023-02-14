@@ -1,5 +1,22 @@
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/subsquid/squid-evm-template)
+# Lightm Squid
+Lightm Squid is used for index related data on chain, just like The Graph but more flexible and allowing for more complex query structures, this is why Lightm migrated from [The Graph](https://thegraph.com) to [Subsquid](https://subsquid.io).
 
+## Starting the local environment
+
+Before doing this, make sure you have Node.js and Docker installed.
+
+And you have to clone [Lightm-evm](https://github.com/LightmNFT/Lightm-evm) and check the README in it.
+
+Then
+
+1. Run `npm i`;
+2. Run `make build` to compile files in `src` to `lib`;
+3. Run `make up-local-archive` to start db to collecting local test net data (make sure you start local test net on localhost:8545);
+4. Run `make up` to start db for processor;
+5. Run `make process` to start the processor, index and aggregate event data on chain;
+6. Open a new terminal window, run `make serve` to start graphql server;
+
+---
 
 # Minimal EVM squid
 
