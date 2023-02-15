@@ -20,6 +20,16 @@ type Collection @entity {
   createAtBlock: BigInt!
   transactionHash: String!
   tokens: [Token!]! @derivedFrom(field: "collection")
+  assetEntries: [AssetEntry!]! @derivedFrom(field: "collection")
+}
+
+# AssetEntry ---
+type AssetEntry @entity {
+  id: ID!
+  assetId: BigInt!
+  collection: Collection!
+  createAtBlock: BigInt!
+  transactionHash: String!
 }
 
 # Token ---

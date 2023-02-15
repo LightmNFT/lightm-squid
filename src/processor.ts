@@ -12,6 +12,7 @@ import * as lightmUniversalFactory from "./abi/LightmUniversalFactory";
 import * as lightmCollection from "./abi/LightmCollection";
 import * as lightmCatalogImplementer from "./abi/LightmCatalogImplementer";
 import {
+  AssetEntry,
   Catalog,
   Collection,
   NestTransfer,
@@ -37,8 +38,11 @@ const factoryContractAddress = (
 
 const { LightmCollectionCreated, LightmCatalogDeployed } =
   lightmUniversalFactory.events;
-const { Transfer: TokenTransfer, NestTransfer: TokenNestTransfer } =
-  lightmCollection.events;
+const {
+  Transfer: TokenTransfer,
+  NestTransfer: TokenNestTransfer,
+  AssetSet,
+} = lightmCollection.events;
 const catalogEvents = Object.values(lightmCatalogImplementer.events).map(
   (event) => event.topic
 );
@@ -79,6 +83,7 @@ const processor = new EvmBatchProcessor()
       [
         TokenTransfer.topic,
         TokenNestTransfer.topic,
+        AssetSet.topic,
         ...Object.values(lightmCatalogImplementer.events).map(
           (event) => event.topic
         ),
@@ -127,6 +132,15 @@ processor.run(new TypeormDatabase(), async (ctx) => {
                 item,
                 targetCollection
               );
+            }
+          } else if (eventTopic === AssetSet.topic) {
+            const targetCollection = await ctx.store.get(
+              Collection,
+              getAddress(item.address)
+            );
+
+            if (targetCollection) {
+              await handleAssetSet(ctx, block.header, item, targetCollection);
             }
           } else if (catalogEvents.includes(eventTopic)) {
             switch (eventTopic) {
@@ -378,6 +392,29 @@ async function handleNestTransfer(
   });
 
   await ctx.store.save(nestTransfer);
+}
+
+async function handleAssetSet(
+  ctx: Ctx,
+  header: EvmBlock,
+  item: LogItem<{
+    evmLog: { topics: true; data: true };
+    transaction: { hash: true };
+  }>,
+  collection: Collection
+) {
+  const data = AssetSet.decode(item.evmLog);
+  const globalAssetId = `${collection.id}:${data.assetId}`;
+
+  const assetEntry = new AssetEntry({
+    id: globalAssetId,
+    assetId: data.assetId.toBigInt(),
+    collection,
+    createAtBlock: BigInt(header.height),
+    transactionHash: item.transaction.hash,
+  });
+
+  await ctx.store.save(assetEntry);
 }
 
 // Part creation and Catalog update

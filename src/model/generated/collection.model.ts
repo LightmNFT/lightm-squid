@@ -2,6 +2,7 @@ import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, M
 import * as marshal from "./marshal"
 import {Owner} from "./owner.model"
 import {Token} from "./token.model"
+import {AssetEntry} from "./assetEntry.model"
 
 @Entity_()
 export class Collection {
@@ -36,4 +37,7 @@ export class Collection {
 
     @OneToMany_(() => Token, e => e.collection)
     tokens!: Token[]
+
+    @OneToMany_(() => AssetEntry, e => e.collection)
+    assetEntries!: AssetEntry[]
 }
