@@ -1276,11 +1276,17 @@
     "type": "function"
   },
   { "inputs": [], "name": "ERC721InvalidTokenId", "type": "error" },
+  {
+    "inputs": [],
+    "name": "LightmMustRemoveSlotEquipmentFirst",
+    "type": "error"
+  },
   { "inputs": [], "name": "RMRKAssetAlreadyExists", "type": "error" },
   { "inputs": [], "name": "RMRKAssetNotFoundInStorage", "type": "error" },
   { "inputs": [], "name": "RMRKIdZeroForbidden", "type": "error" },
+  { "inputs": [], "name": "RMRKIndexOutOfRange", "type": "error" },
   { "inputs": [], "name": "RMRKMaxPendingAssetsReached", "type": "error" },
-  { "inputs": [], "name": "RMRKNotApprovedForAssetsOrOwner", "type": "error" },
+  { "inputs": [], "name": "RMRKNoAssetMatchingId", "type": "error" },
   {
     "anonymous": false,
     "inputs": [
@@ -1605,6 +1611,19 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "string",
+        "name": "fallbackURI",
+        "type": "string"
+      }
+    ],
+    "name": "LightmMultiAssetFallbackURISet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "from",
@@ -1636,6 +1655,94 @@
       }
     ],
     "name": "NestTransfer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "metadataURI",
+        "type": "string"
+      }
+    ],
+    "name": "RMRKCollectionMetdataSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "previousAdminRole",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "newAdminRole",
+        "type": "bytes32"
+      }
+    ],
+    "name": "RoleAdminChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "RoleGranted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "RoleRevoked",
     "type": "event"
   },
   {
@@ -1745,6 +1852,13 @@
     "type": "event"
   },
   {
+    "inputs": [],
+    "name": "ASSET_CONTRIBUTOR_ROLE",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       { "internalType": "uint64", "name": "id", "type": "uint64" },
       { "internalType": "string", "name": "metadataURI", "type": "string" }
@@ -1809,12 +1923,61 @@
   },
   {
     "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" }
+    ],
+    "name": "getRoleAdmin",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "grantRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "hasRole",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "bytes[]", "name": "data", "type": "bytes[]" }
     ],
     "name": "multicall",
     "outputs": [
       { "internalType": "bytes[]", "name": "results", "type": "bytes[]" }
     ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "renounceRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "revokeRole",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },

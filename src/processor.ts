@@ -26,8 +26,8 @@ import { getAddress } from "ethers/lib/utils";
 
 const isDev = process.env.NODE_ENV === "development";
 
-const FACTORY_ADDRESS = "0x1A2E0E5db589f44bDA45a7E8e38054a65b0eb946";
-const FACTORY_ADDRESS_LOCAL = "0x314be53209C813CAFC066EF4d9a5CE6fec5Bd7b4";
+const FACTORY_ADDRESS = "0x52154189a2C0Db74354F36f6cf3963D40139caae";
+const FACTORY_ADDRESS_LOCAL = "0x52154189a2C0Db74354F36f6cf3963D40139caae";
 
 const START_BLOCK = 3_650_000;
 const START_BLOCK_LOCAL = 0;
