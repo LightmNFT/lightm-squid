@@ -1276,17 +1276,11 @@
     "type": "function"
   },
   { "inputs": [], "name": "ERC721InvalidTokenId", "type": "error" },
-  {
-    "inputs": [],
-    "name": "LightmMustRemoveSlotEquipmentFirst",
-    "type": "error"
-  },
   { "inputs": [], "name": "RMRKAssetAlreadyExists", "type": "error" },
   { "inputs": [], "name": "RMRKAssetNotFoundInStorage", "type": "error" },
   { "inputs": [], "name": "RMRKIdZeroForbidden", "type": "error" },
   { "inputs": [], "name": "RMRKIndexOutOfRange", "type": "error" },
   { "inputs": [], "name": "RMRKMaxPendingAssetsReached", "type": "error" },
-  { "inputs": [], "name": "RMRKNoAssetMatchingId", "type": "error" },
   {
     "anonymous": false,
     "inputs": [
@@ -1655,19 +1649,6 @@
       }
     ],
     "name": "NestTransfer",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "metadataURI",
-        "type": "string"
-      }
-    ],
-    "name": "RMRKCollectionMetdataSet",
     "type": "event"
   },
   {

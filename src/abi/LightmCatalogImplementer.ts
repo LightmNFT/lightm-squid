@@ -11,6 +11,9 @@ export const events = {
     AddedPart: new LogEvent<([partId: ethers.BigNumber, itemType: number, zIndex: number, equippableAddresses: Array<string>, metadataURI: string] & {partId: ethers.BigNumber, itemType: number, zIndex: number, equippableAddresses: Array<string>, metadataURI: string})>(
         abi, '0xc4715b52aed3b9dfb2fbdc63e39e234892ec1dd3811d2c671646dbfd3d32d92e'
     ),
+    LightmCatalogDeployed: new LogEvent<[]>(
+        abi, '0x923a3e24a2e8d8a6fa68fd95d5af67967dd312c07979c5e0c20e5486a5889eb3'
+    ),
     LightmCatalogMetadataURISet: new LogEvent<([metadataURI: string] & {metadataURI: string})>(
         abi, '0xcc5631eeaf22fdf17345dfef3516e0d735a45a6f08f87e0928accde505ded9fb'
     ),

@@ -80,23 +80,6 @@ export const ABI_JSON = [
     {
         "type": "event",
         "anonymous": false,
-        "name": "LightmCatalogDeployed",
-        "inputs": [
-            {
-                "type": "address",
-                "name": "catalogAddress",
-                "indexed": true
-            },
-            {
-                "type": "address",
-                "name": "owner",
-                "indexed": true
-            }
-        ]
-    },
-    {
-        "type": "event",
-        "anonymous": false,
         "name": "LightmCollectionCreated",
         "inputs": [
             {

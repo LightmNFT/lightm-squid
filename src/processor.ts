@@ -36,8 +36,7 @@ const factoryContractAddress = (
   !isDev ? FACTORY_ADDRESS : FACTORY_ADDRESS_LOCAL
 ).toLowerCase();
 
-const { LightmCollectionCreated, LightmCatalogDeployed } =
-  lightmUniversalFactory.events;
+const { LightmCollectionCreated } = lightmUniversalFactory.events;
 const {
   Transfer: TokenTransfer,
   NestTransfer: TokenNestTransfer,
@@ -67,7 +66,7 @@ const processor = new EvmBatchProcessor()
   })
   .setBlockRange({ from: !isDev ? START_BLOCK : START_BLOCK_LOCAL })
   .addLog(factoryContractAddress, {
-    filter: [[LightmCollectionCreated.topic, LightmCatalogDeployed.topic]],
+    filter: [[LightmCollectionCreated.topic]],
     data: {
       evmLog: {
         topics: true,
@@ -84,9 +83,7 @@ const processor = new EvmBatchProcessor()
         TokenTransfer.topic,
         TokenNestTransfer.topic,
         AssetSet.topic,
-        ...Object.values(lightmCatalogImplementer.events).map(
-          (event) => event.topic
-        ),
+        ...catalogEvents,
       ],
     ],
     data: {
@@ -106,8 +103,6 @@ processor.run(new TypeormDatabase(), async (ctx) => {
         if (item.address === factoryContractAddress) {
           if (eventTopic === LightmCollectionCreated.topic) {
             await handleCollectionCreated(ctx, block.header, item);
-          } else if (eventTopic === LightmCatalogDeployed.topic) {
-            await handleCatalogDeployed(ctx, block.header, item);
           }
         } else {
           if (eventTopic === TokenTransfer.topic) {
@@ -144,6 +139,10 @@ processor.run(new TypeormDatabase(), async (ctx) => {
             }
           } else if (catalogEvents.includes(eventTopic)) {
             switch (eventTopic) {
+              case lightmCatalogImplementer.events.LightmCatalogDeployed
+                .topic: {
+                await handleCatalogDeployed(ctx, block.header, item);
+              }
               case lightmCatalogImplementer.events.AddedEquippables.topic: {
                 await handleAddedEquippables(ctx, item);
                 break;
@@ -237,13 +236,25 @@ async function handleCatalogDeployed(
     transaction: { hash: true };
   }>
 ) {
-  const data = LightmCatalogDeployed.decode(item.evmLog);
+  const zeroOwner =
+    (await ctx.store.get(Owner, constants.AddressZero)) ||
+    new Owner({
+      id: constants.AddressZero,
+      collectionBalance: 0n,
+      catalogBalance: 0n,
+      balance: 0n,
+    });
+  const catalogAddress = getAddress(item.address);
+  const catalog = new Catalog({
+    id: catalogAddress,
+    owner: zeroOwner,
+    metadataURI: "",
+    type: "",
+    createAtBlock: BigInt(header.height),
+    transactionHash: item.transaction.hash,
+  });
 
-  const catalog = (await ctx.store.get(Catalog, data.catalogAddress))!;
-
-  catalog.createAtBlock = BigInt(header.height);
-  catalog.transactionHash = item.transaction.hash;
-
+  await ctx.store.save(zeroOwner);
   await ctx.store.save(catalog);
 }
 
@@ -480,30 +491,14 @@ async function handleCatalogMetadataURISet(
     lightmCatalogImplementer.events.LightmCatalogMetadataURISet.decode(
       item.evmLog
     );
-  const zeroOwner =
-    (await ctx.store.get(Owner, constants.AddressZero)) ||
-    new Owner({
-      id: constants.AddressZero,
-      collectionBalance: 0n,
-      catalogBalance: 0n,
-      balance: 0n,
-    });
   const catalogAddress = getAddress(item.address);
-  const catalog =
-    (await ctx.store.get(Catalog, catalogAddress)) ||
-    new Catalog({
-      id: catalogAddress,
-      owner: zeroOwner,
-      metadataURI: "",
-      type: "",
-      createAtBlock: 0n,
-      transactionHash: "",
-    });
+  const catalog = await ctx.store.get(Catalog, catalogAddress);
 
-  catalog.metadataURI = data.metadataURI;
+  if (catalog) {
+    catalog.metadataURI = data.metadataURI;
 
-  await ctx.store.save(zeroOwner);
-  await ctx.store.save(catalog);
+    await ctx.store.save(catalog);
+  }
 }
 
 async function handleCatalogTypeSet(
@@ -516,30 +511,14 @@ async function handleCatalogTypeSet(
   const data = lightmCatalogImplementer.events.LightmCatalogTypeSet.decode(
     item.evmLog
   );
-  const zeroOwner =
-    (await ctx.store.get(Owner, constants.AddressZero)) ||
-    new Owner({
-      id: constants.AddressZero,
-      collectionBalance: 0n,
-      catalogBalance: 0n,
-      balance: 0n,
-    });
   const catalogAddress = getAddress(item.address);
-  const catalog =
-    (await ctx.store.get(Catalog, catalogAddress)) ||
-    new Catalog({
-      id: catalogAddress,
-      owner: zeroOwner,
-      metadataURI: "",
-      type: "",
-      createAtBlock: 0n,
-      transactionHash: "",
-    });
+  const catalog = await ctx.store.get(Catalog, catalogAddress);
 
-  catalog.type = data.type_;
+  if (catalog) {
+    catalog.type = data.type_;
 
-  await ctx.store.save(zeroOwner);
-  await ctx.store.save(catalog);
+    await ctx.store.save(catalog);
+  }
 }
 
 async function handleAddedPart(
@@ -554,22 +533,24 @@ async function handleAddedPart(
   const catalogAddress = getAddress(item.address);
   const catalog = await ctx.store.get(Catalog, catalogAddress);
 
-  const partGlobalId = `${catalogAddress}:${data.partId}`;
+  if (catalog) {
+    const partGlobalId = `${catalogAddress}:${data.partId}`;
 
-  const part = new Part({
-    id: partGlobalId,
-    catalog,
-    partId: data.partId.toBigInt(),
-    itemType: data.itemType,
-    zIndex: data.zIndex,
-    metadataURI: data.metadataURI,
-    equippableAddresses: data.equippableAddresses,
-    equippableToAll: false,
-    createAtBlock: BigInt(header.height),
-    transactionHash: item.transaction.hash,
-  });
+    const part = new Part({
+      id: partGlobalId,
+      catalog,
+      partId: data.partId.toBigInt(),
+      itemType: data.itemType,
+      zIndex: data.zIndex,
+      metadataURI: data.metadataURI,
+      equippableAddresses: data.equippableAddresses,
+      equippableToAll: false,
+      createAtBlock: BigInt(header.height),
+      transactionHash: item.transaction.hash,
+    });
 
-  await ctx.store.save(part);
+    await ctx.store.save(part);
+  }
 }
 
 async function handleAddedEquippables(
@@ -584,14 +565,16 @@ async function handleAddedEquippables(
   );
   const catalogAddress = getAddress(item.address);
   const partGlobalId = `${catalogAddress}:${data.partId}`;
-  const part = (await ctx.store.get(Part, partGlobalId))!;
+  const part = await ctx.store.get(Part, partGlobalId);
 
-  part.equippableAddresses = part.equippableAddresses.concat(
-    data.equippableAddresses
-  );
-  part.equippableToAll = false;
+  if (part) {
+    part.equippableAddresses = part.equippableAddresses.concat(
+      data.equippableAddresses
+    );
+    part.equippableToAll = false;
 
-  await ctx.store.save(part);
+    await ctx.store.save(part);
+  }
 }
 
 async function handleSetEquippables(
@@ -606,12 +589,14 @@ async function handleSetEquippables(
   );
   const catalogAddress = getAddress(item.address);
   const partGlobalId = `${catalogAddress}:${data.partId}`;
-  const part = (await ctx.store.get(Part, partGlobalId))!;
+  const part = await ctx.store.get(Part, partGlobalId);
 
-  part.equippableAddresses = data.equippableAddresses;
-  part.equippableToAll = false;
+  if (part) {
+    part.equippableAddresses = data.equippableAddresses;
+    part.equippableToAll = false;
 
-  await ctx.store.save(part);
+    await ctx.store.save(part);
+  }
 }
 
 async function handleSetEquippableToAll(
@@ -628,7 +613,9 @@ async function handleSetEquippableToAll(
   const partGlobalId = `${catalogAddress}:${data.partId}`;
   const part = (await ctx.store.get(Part, partGlobalId))!;
 
-  part.equippableToAll = true;
+  if (part) {
+    part.equippableToAll = true;
 
-  await ctx.store.save(part);
+    await ctx.store.save(part);
+  }
 }

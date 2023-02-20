@@ -128,6 +128,12 @@
   },
   {
     "anonymous": false,
+    "inputs": [],
+    "name": "LightmCatalogDeployed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
     "inputs": [
       {
         "indexed": false,

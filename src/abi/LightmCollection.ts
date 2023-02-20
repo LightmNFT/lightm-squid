@@ -53,8 +53,20 @@ export const events = {
     ChildTransferred: new LogEvent<([tokenId: ethers.BigNumber, childIndex: ethers.BigNumber, childAddress: string, childId: ethers.BigNumber, fromPending: boolean] & {tokenId: ethers.BigNumber, childIndex: ethers.BigNumber, childAddress: string, childId: ethers.BigNumber, fromPending: boolean})>(
         abi, '0x2bedee38cdb22411c14554191243c0e117c0088ddae3459876acd46a0fd53815'
     ),
+    LightmMultiAssetFallbackURISet: new LogEvent<([fallbackURI: string] & {fallbackURI: string})>(
+        abi, '0x0e901add6f84572cb7fb5b3eed06b93d96e096d1aaadb2f8a4707a039f8533f6'
+    ),
     NestTransfer: new LogEvent<([from: string, to: string, fromTokenId: ethers.BigNumber, toTokenId: ethers.BigNumber, tokenId: ethers.BigNumber] & {from: string, to: string, fromTokenId: ethers.BigNumber, toTokenId: ethers.BigNumber, tokenId: ethers.BigNumber})>(
         abi, '0x04444026cefd1b05506559cab59d1b865ae3ba4ed2fe5c894f04e522776c552d'
+    ),
+    RoleAdminChanged: new LogEvent<([role: string, previousAdminRole: string, newAdminRole: string] & {role: string, previousAdminRole: string, newAdminRole: string})>(
+        abi, '0xbd79b86ffe0ab8e8776151514217cd7cacd52c909f66475c3af44e129f0b00ff'
+    ),
+    RoleGranted: new LogEvent<([role: string, account: string, sender: string] & {role: string, account: string, sender: string})>(
+        abi, '0x2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d'
+    ),
+    RoleRevoked: new LogEvent<([role: string, account: string, sender: string] & {role: string, account: string, sender: string})>(
+        abi, '0xf6391f5c32d9c69d2a47ea670b442974b53935d1edc7fd64eb21e047a839171b'
     ),
     SlotEquipmentsAdd: new LogEvent<([tokenId: ethers.BigNumber, catalogRelatedAssetId: ethers.BigNumber, slotEquipments: Array<([tokenId: ethers.BigNumber, catalogRelatedAssetId: ethers.BigNumber, slotId: ethers.BigNumber, childCatalogRelatedAssetId: ethers.BigNumber, child: ([tokenId: ethers.BigNumber, contractAddress: string] & {tokenId: ethers.BigNumber, contractAddress: string})] & {tokenId: ethers.BigNumber, catalogRelatedAssetId: ethers.BigNumber, slotId: ethers.BigNumber, childCatalogRelatedAssetId: ethers.BigNumber, child: ([tokenId: ethers.BigNumber, contractAddress: string] & {tokenId: ethers.BigNumber, contractAddress: string})})>] & {tokenId: ethers.BigNumber, catalogRelatedAssetId: ethers.BigNumber, slotEquipments: Array<([tokenId: ethers.BigNumber, catalogRelatedAssetId: ethers.BigNumber, slotId: ethers.BigNumber, childCatalogRelatedAssetId: ethers.BigNumber, child: ([tokenId: ethers.BigNumber, contractAddress: string] & {tokenId: ethers.BigNumber, contractAddress: string})] & {tokenId: ethers.BigNumber, catalogRelatedAssetId: ethers.BigNumber, slotId: ethers.BigNumber, childCatalogRelatedAssetId: ethers.BigNumber, child: ([tokenId: ethers.BigNumber, contractAddress: string] & {tokenId: ethers.BigNumber, contractAddress: string})})>})>(
         abi, '0x15eb22d54c9b4f471d2c739ce37782190882506081ac19202d87c2f00321bcce'
@@ -272,6 +284,9 @@ export const functions = {
     collectionMetadata: new Func<[], {}, string>(
         abi, '0x89ed2edf'
     ),
+    ASSET_CONTRIBUTOR_ROLE: new Func<[], {}, string>(
+        abi, '0x16995cfd'
+    ),
     addAssetEntry: new Func<[id: ethers.BigNumber, metadataURI: string], {id: ethers.BigNumber, metadataURI: string}, []>(
         abi, '0xdb7a48f7'
     ),
@@ -284,8 +299,23 @@ export const functions = {
     getCollectionOwner: new Func<[], {}, string>(
         abi, '0x1b5d098d'
     ),
+    getRoleAdmin: new Func<[role: string], {role: string}, string>(
+        abi, '0x248a9ca3'
+    ),
+    grantRole: new Func<[role: string, account: string], {role: string, account: string}, []>(
+        abi, '0x2f2ff15d'
+    ),
+    hasRole: new Func<[role: string, account: string], {role: string, account: string}, boolean>(
+        abi, '0x91d14854'
+    ),
     multicall: new Func<[data: Array<string>], {data: Array<string>}, Array<string>>(
         abi, '0xac9650d8'
+    ),
+    renounceRole: new Func<[role: string, account: string], {role: string, account: string}, []>(
+        abi, '0x36568abe'
+    ),
+    revokeRole: new Func<[role: string, account: string], {role: string, account: string}, []>(
+        abi, '0xd547741f'
     ),
     setCollectionMetadata: new Func<[newMetadata: string], {newMetadata: string}, []>(
         abi, '0x19660839'
@@ -486,8 +516,20 @@ export class Contract extends ContractBase {
         return this.eth_call(functions.collectionMetadata, [])
     }
 
+    ASSET_CONTRIBUTOR_ROLE(): Promise<string> {
+        return this.eth_call(functions.ASSET_CONTRIBUTOR_ROLE, [])
+    }
+
     getCollectionOwner(): Promise<string> {
         return this.eth_call(functions.getCollectionOwner, [])
+    }
+
+    getRoleAdmin(role: string): Promise<string> {
+        return this.eth_call(functions.getRoleAdmin, [role])
+    }
+
+    hasRole(role: string, account: string): Promise<boolean> {
+        return this.eth_call(functions.hasRole, [role, account])
     }
 
     getMintConfig(): Promise<([whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number] & {whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number})> {

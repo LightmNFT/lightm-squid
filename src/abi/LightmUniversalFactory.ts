@@ -5,9 +5,6 @@ import {ABI_JSON} from './LightmUniversalFactory.abi'
 export const abi = new ethers.utils.Interface(ABI_JSON);
 
 export const events = {
-    LightmCatalogDeployed: new LogEvent<([catalogAddress: string, owner: string] & {catalogAddress: string, owner: string})>(
-        abi, '0xa103409688dcd19e63e729810671d719b922fed7b065851a974e0e7797b0391b'
-    ),
     LightmCollectionCreated: new LogEvent<([collectionAddress: string, owner: string] & {collectionAddress: string, owner: string})>(
         abi, '0x8c7cf41550332d6435d1cf344cd12fadfcd22eed7dd46ac73177131dfd058dde'
     ),

@@ -1898,12 +1898,12 @@ export const ABI_JSON = [
     },
     {
         "type": "error",
-        "name": "RMRKMaxPendingAssetsReached",
+        "name": "RMRKIndexOutOfRange",
         "inputs": []
     },
     {
         "type": "error",
-        "name": "RMRKNotApprovedForAssetsOrOwner",
+        "name": "RMRKMaxPendingAssetsReached",
         "inputs": []
     },
     {
@@ -2192,6 +2192,18 @@ export const ABI_JSON = [
     {
         "type": "event",
         "anonymous": false,
+        "name": "LightmMultiAssetFallbackURISet",
+        "inputs": [
+            {
+                "type": "string",
+                "name": "fallbackURI",
+                "indexed": false
+            }
+        ]
+    },
+    {
+        "type": "event",
+        "anonymous": false,
         "name": "NestTransfer",
         "inputs": [
             {
@@ -2217,6 +2229,72 @@ export const ABI_JSON = [
             {
                 "type": "uint256",
                 "name": "tokenId",
+                "indexed": true
+            }
+        ]
+    },
+    {
+        "type": "event",
+        "anonymous": false,
+        "name": "RoleAdminChanged",
+        "inputs": [
+            {
+                "type": "bytes32",
+                "name": "role",
+                "indexed": true
+            },
+            {
+                "type": "bytes32",
+                "name": "previousAdminRole",
+                "indexed": true
+            },
+            {
+                "type": "bytes32",
+                "name": "newAdminRole",
+                "indexed": true
+            }
+        ]
+    },
+    {
+        "type": "event",
+        "anonymous": false,
+        "name": "RoleGranted",
+        "inputs": [
+            {
+                "type": "bytes32",
+                "name": "role",
+                "indexed": true
+            },
+            {
+                "type": "address",
+                "name": "account",
+                "indexed": true
+            },
+            {
+                "type": "address",
+                "name": "sender",
+                "indexed": true
+            }
+        ]
+    },
+    {
+        "type": "event",
+        "anonymous": false,
+        "name": "RoleRevoked",
+        "inputs": [
+            {
+                "type": "bytes32",
+                "name": "role",
+                "indexed": true
+            },
+            {
+                "type": "address",
+                "name": "account",
+                "indexed": true
+            },
+            {
+                "type": "address",
+                "name": "sender",
                 "indexed": true
             }
         ]
@@ -2321,6 +2399,19 @@ export const ABI_JSON = [
     },
     {
         "type": "function",
+        "name": "ASSET_CONTRIBUTOR_ROLE",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+            {
+                "type": "bytes32"
+            }
+        ]
+    },
+    {
+        "type": "function",
         "name": "addAssetEntry",
         "constant": false,
         "payable": false,
@@ -2412,6 +2503,63 @@ export const ABI_JSON = [
     },
     {
         "type": "function",
+        "name": "getRoleAdmin",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+            {
+                "type": "bytes32",
+                "name": "role"
+            }
+        ],
+        "outputs": [
+            {
+                "type": "bytes32"
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "grantRole",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+            {
+                "type": "bytes32",
+                "name": "role"
+            },
+            {
+                "type": "address",
+                "name": "account"
+            }
+        ],
+        "outputs": []
+    },
+    {
+        "type": "function",
+        "name": "hasRole",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+            {
+                "type": "bytes32",
+                "name": "role"
+            },
+            {
+                "type": "address",
+                "name": "account"
+            }
+        ],
+        "outputs": [
+            {
+                "type": "bool"
+            }
+        ]
+    },
+    {
+        "type": "function",
         "name": "multicall",
         "constant": false,
         "payable": false,
@@ -2427,6 +2575,40 @@ export const ABI_JSON = [
                 "name": "results"
             }
         ]
+    },
+    {
+        "type": "function",
+        "name": "renounceRole",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+            {
+                "type": "bytes32",
+                "name": "role"
+            },
+            {
+                "type": "address",
+                "name": "account"
+            }
+        ],
+        "outputs": []
+    },
+    {
+        "type": "function",
+        "name": "revokeRole",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+            {
+                "type": "bytes32",
+                "name": "role"
+            },
+            {
+                "type": "address",
+                "name": "account"
+            }
+        ],
+        "outputs": []
     },
     {
         "type": "function",

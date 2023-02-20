@@ -100,25 +100,6 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "catalogAddress",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      }
-    ],
-    "name": "LightmCatalogDeployed",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
         "name": "collectionAddress",
         "type": "address"
       },

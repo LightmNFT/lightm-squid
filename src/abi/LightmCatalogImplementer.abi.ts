@@ -120,6 +120,12 @@ export const ABI_JSON = [
     {
         "type": "event",
         "anonymous": false,
+        "name": "LightmCatalogDeployed",
+        "inputs": []
+    },
+    {
+        "type": "event",
+        "anonymous": false,
         "name": "LightmCatalogMetadataURISet",
         "inputs": [
             {
