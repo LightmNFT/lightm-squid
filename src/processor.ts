@@ -142,6 +142,7 @@ processor.run(new TypeormDatabase(), async (ctx) => {
               case lightmCatalogImplementer.events.LightmCatalogDeployed
                 .topic: {
                 await handleCatalogDeployed(ctx, block.header, item);
+                break;
               }
               case lightmCatalogImplementer.events.AddedEquippables.topic: {
                 await handleAddedEquippables(ctx, item);
