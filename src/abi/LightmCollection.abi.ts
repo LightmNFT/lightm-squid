@@ -166,7 +166,47 @@ export const ABI_JSON = [
     },
     {
         "type": "error",
-        "name": "LightmMustRemoveSlotEquipmentFirst",
+        "name": "ERC721AddressZeroIsNotAValidOwner",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "ERC721ApprovalToCurrentOwner",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "ERC721ApproveCallerIsNotOwnerNorApprovedForAll",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "ERC721ApproveToCaller",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "ERC721NotApprovedOrOwner",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "ERC721TransferFromIncorrectOwner",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "ERC721TransferToTheZeroAddress",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "LightmNotInActiveAssets",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "LightmSlotEquipmentNotExist",
         "inputs": []
     },
     {
@@ -202,6 +242,21 @@ export const ABI_JSON = [
                 "name": "childTokenId"
             }
         ]
+    },
+    {
+        "type": "error",
+        "name": "RMRKNestableTooDeep",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "RMRKNestableTransferToDescendant",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "RMRKNestableTransferToSelf",
+        "inputs": []
     },
     {
         "type": "error",
@@ -913,6 +968,11 @@ export const ABI_JSON = [
     },
     {
         "type": "error",
+        "name": "RMRKNotApprovedForAssetsOrOwner",
+        "inputs": []
+    },
+    {
+        "type": "error",
         "name": "RMRKTokenDoesNotHaveAsset",
         "inputs": []
     },
@@ -989,7 +1049,7 @@ export const ABI_JSON = [
         ],
         "outputs": [
             {
-                "type": "uint16[]"
+                "type": "uint64[]"
             }
         ]
     },
@@ -1269,7 +1329,7 @@ export const ABI_JSON = [
                 "name": "tokenId"
             },
             {
-                "type": "uint16[]",
+                "type": "uint64[]",
                 "name": "priorities"
             }
         ],
@@ -1300,12 +1360,12 @@ export const ABI_JSON = [
     },
     {
         "type": "error",
-        "name": "LightmSlotIsOccupied",
+        "name": "LightmIndexOverLength",
         "inputs": []
     },
     {
         "type": "error",
-        "name": "RMRKNoAssetMatchingId",
+        "name": "LightmSlotIsOccupied",
         "inputs": []
     },
     {
@@ -1854,6 +1914,393 @@ export const ABI_JSON = [
     {
         "type": "event",
         "anonymous": false,
+        "name": "ChildAssetEquipped",
+        "inputs": [
+            {
+                "type": "uint256",
+                "name": "tokenId",
+                "indexed": true
+            },
+            {
+                "type": "uint64",
+                "name": "assetId",
+                "indexed": true
+            },
+            {
+                "type": "uint64",
+                "name": "slotPartId",
+                "indexed": true
+            },
+            {
+                "type": "uint256",
+                "name": "childId",
+                "indexed": false
+            },
+            {
+                "type": "address",
+                "name": "childAddress",
+                "indexed": false
+            },
+            {
+                "type": "uint64",
+                "name": "childAssetId",
+                "indexed": false
+            }
+        ]
+    },
+    {
+        "type": "event",
+        "anonymous": false,
+        "name": "ChildAssetUnequipped",
+        "inputs": [
+            {
+                "type": "uint256",
+                "name": "tokenId",
+                "indexed": true
+            },
+            {
+                "type": "uint64",
+                "name": "assetId",
+                "indexed": true
+            },
+            {
+                "type": "uint64",
+                "name": "slotPartId",
+                "indexed": true
+            },
+            {
+                "type": "uint256",
+                "name": "childId",
+                "indexed": false
+            },
+            {
+                "type": "address",
+                "name": "childAddress",
+                "indexed": false
+            },
+            {
+                "type": "uint64",
+                "name": "childAssetId",
+                "indexed": false
+            }
+        ]
+    },
+    {
+        "type": "event",
+        "anonymous": false,
+        "name": "ValidParentEquippableGroupIdSet",
+        "inputs": [
+            {
+                "type": "uint64",
+                "name": "equippableGroupId",
+                "indexed": true
+            },
+            {
+                "type": "uint64",
+                "name": "slotPartId",
+                "indexed": true
+            },
+            {
+                "type": "address",
+                "name": "parentAddress",
+                "indexed": false
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "_canTokenBeEquippedWithAssetIntoSlot",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+            {
+                "type": "address",
+                "name": "parent"
+            },
+            {
+                "type": "uint256",
+                "name": "tokenId"
+            },
+            {
+                "type": "uint64",
+                "name": "assetId"
+            },
+            {
+                "type": "uint64",
+                "name": "slotId"
+            }
+        ],
+        "outputs": [
+            {
+                "type": "bool"
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "_getAssetAndEquippableData",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+            {
+                "type": "uint256"
+            },
+            {
+                "type": "uint64",
+                "name": "assetId"
+            }
+        ],
+        "outputs": [
+            {
+                "type": "string"
+            },
+            {
+                "type": "uint64"
+            },
+            {
+                "type": "address"
+            },
+            {
+                "type": "uint64[]"
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "_getEquipment",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+            {
+                "type": "uint256",
+                "name": "tokenId"
+            },
+            {
+                "type": "address",
+                "name": "targetCatalogAddress"
+            },
+            {
+                "type": "uint64",
+                "name": "slotPartId"
+            }
+        ],
+        "outputs": [
+            {
+                "type": "tuple",
+                "components": [
+                    {
+                        "type": "uint64",
+                        "name": "assetId"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "childAssetId"
+                    },
+                    {
+                        "type": "uint256",
+                        "name": "childId"
+                    },
+                    {
+                        "type": "address",
+                        "name": "childEquippableAddress"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "canTokenBeEquippedWithAssetIntoSlot",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+            {
+                "type": "address",
+                "name": "parent"
+            },
+            {
+                "type": "uint256",
+                "name": "tokenId"
+            },
+            {
+                "type": "uint64",
+                "name": "assetId"
+            },
+            {
+                "type": "uint64",
+                "name": "slotId"
+            }
+        ],
+        "outputs": [
+            {
+                "type": "bool"
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "equip",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+            {
+                "type": "tuple",
+                "name": "data",
+                "components": [
+                    {
+                        "type": "uint256",
+                        "name": "tokenId"
+                    },
+                    {
+                        "type": "uint256",
+                        "name": "childIndex"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "assetId"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "slotPartId"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "childAssetId"
+                    }
+                ]
+            }
+        ],
+        "outputs": []
+    },
+    {
+        "type": "function",
+        "name": "getAssetAndEquippableData",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+            {
+                "type": "uint256",
+                "name": "tokenId"
+            },
+            {
+                "type": "uint64",
+                "name": "assetId"
+            }
+        ],
+        "outputs": [
+            {
+                "type": "string"
+            },
+            {
+                "type": "uint64"
+            },
+            {
+                "type": "address"
+            },
+            {
+                "type": "uint64[]"
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "getEquipment",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+            {
+                "type": "uint256",
+                "name": "tokenId"
+            },
+            {
+                "type": "address",
+                "name": "targetCatalogAddress"
+            },
+            {
+                "type": "uint64",
+                "name": "slotPartId"
+            }
+        ],
+        "outputs": [
+            {
+                "type": "tuple",
+                "components": [
+                    {
+                        "type": "uint64",
+                        "name": "assetId"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "childAssetId"
+                    },
+                    {
+                        "type": "uint256",
+                        "name": "childId"
+                    },
+                    {
+                        "type": "address",
+                        "name": "childEquippableAddress"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "isChildEquipped",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+            {
+                "type": "uint256",
+                "name": "tokenId"
+            },
+            {
+                "type": "address",
+                "name": "childAddress"
+            },
+            {
+                "type": "uint256",
+                "name": "childId"
+            }
+        ],
+        "outputs": [
+            {
+                "type": "bool"
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "unequip",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+            {
+                "type": "uint256",
+                "name": "tokenId"
+            },
+            {
+                "type": "uint64",
+                "name": "assetId"
+            },
+            {
+                "type": "uint64",
+                "name": "slotPartId"
+            }
+        ],
+        "outputs": []
+    },
+    {
+        "type": "event",
+        "anonymous": false,
         "name": "RMRKCollectionMetdataSet",
         "inputs": [
             {
@@ -1883,6 +2330,16 @@ export const ABI_JSON = [
     },
     {
         "type": "error",
+        "name": "LightmImplNotOwnerOrAssetContributor",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "LightmMustRemoveSlotEquipmentFirst",
+        "inputs": []
+    },
+    {
+        "type": "error",
         "name": "RMRKAssetAlreadyExists",
         "inputs": []
     },
@@ -1904,6 +2361,11 @@ export const ABI_JSON = [
     {
         "type": "error",
         "name": "RMRKMaxPendingAssetsReached",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "RMRKNoAssetMatchingId",
         "inputs": []
     },
     {
@@ -2031,12 +2493,12 @@ export const ABI_JSON = [
     {
         "type": "event",
         "anonymous": false,
-        "name": "AssetAddedToToken",
+        "name": "AssetAddedToTokens",
         "inputs": [
             {
-                "type": "uint256",
-                "name": "tokenId",
-                "indexed": true
+                "type": "uint256[]",
+                "name": "tokenIds",
+                "indexed": false
             },
             {
                 "type": "uint64",
@@ -2045,7 +2507,7 @@ export const ABI_JSON = [
             },
             {
                 "type": "uint64",
-                "name": "replacedId",
+                "name": "replacesId",
                 "indexed": true
             }
         ]
@@ -2612,6 +3074,31 @@ export const ABI_JSON = [
     },
     {
         "type": "function",
+        "name": "royaltyInfo",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+            {
+                "type": "uint256",
+                "name": "tokenId"
+            },
+            {
+                "type": "uint256",
+                "name": "salePrice"
+            }
+        ],
+        "outputs": [
+            {
+                "type": "address"
+            },
+            {
+                "type": "uint256"
+            }
+        ]
+    },
+    {
+        "type": "function",
         "name": "setCollectionMetadata",
         "constant": false,
         "payable": false,
@@ -2619,6 +3106,19 @@ export const ABI_JSON = [
             {
                 "type": "string",
                 "name": "newMetadata"
+            }
+        ],
+        "outputs": []
+    },
+    {
+        "type": "function",
+        "name": "setCollectionOwner",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+            {
+                "type": "address",
+                "name": "target"
             }
         ],
         "outputs": []
@@ -2669,6 +3169,11 @@ export const ABI_JSON = [
     {
         "type": "error",
         "name": "LightmMintModuleNoWhitelistStageSet",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "LightmMintModuleOverMaxSupply",
         "inputs": []
     },
     {
@@ -2731,6 +3236,10 @@ export const ABI_JSON = [
                         "name": "publicMintPrice"
                     },
                     {
+                        "type": "uint256",
+                        "name": "maxSupply"
+                    },
+                    {
                         "type": "uint64",
                         "name": "whitelistMintLimit"
                     },
@@ -2774,6 +3283,19 @@ export const ABI_JSON = [
         "outputs": [
             {
                 "type": "bytes32"
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "maxSupply",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+            {
+                "type": "uint256"
             }
         ]
     },

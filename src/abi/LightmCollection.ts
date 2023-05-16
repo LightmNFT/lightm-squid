@@ -8,6 +8,15 @@ export const events = {
     DiamondCut: new LogEvent<([_diamondCut: Array<([facetAddress: string, action: number, functionSelectors: Array<string>] & {facetAddress: string, action: number, functionSelectors: Array<string>})>, _init: string, _calldata: string] & {_diamondCut: Array<([facetAddress: string, action: number, functionSelectors: Array<string>] & {facetAddress: string, action: number, functionSelectors: Array<string>})>, _init: string, _calldata: string})>(
         abi, '0x8faa70878671ccd212d20771b795c50af8fd3ff6cf27f4bde57e5d4de0aeb673'
     ),
+    ChildAssetEquipped: new LogEvent<([tokenId: ethers.BigNumber, assetId: ethers.BigNumber, slotPartId: ethers.BigNumber, childId: ethers.BigNumber, childAddress: string, childAssetId: ethers.BigNumber] & {tokenId: ethers.BigNumber, assetId: ethers.BigNumber, slotPartId: ethers.BigNumber, childId: ethers.BigNumber, childAddress: string, childAssetId: ethers.BigNumber})>(
+        abi, '0x1f5de02b1d9c93ca468f54630e1daf13f6dc458a63f8061ff73e85bf9bc38884'
+    ),
+    ChildAssetUnequipped: new LogEvent<([tokenId: ethers.BigNumber, assetId: ethers.BigNumber, slotPartId: ethers.BigNumber, childId: ethers.BigNumber, childAddress: string, childAssetId: ethers.BigNumber] & {tokenId: ethers.BigNumber, assetId: ethers.BigNumber, slotPartId: ethers.BigNumber, childId: ethers.BigNumber, childAddress: string, childAssetId: ethers.BigNumber})>(
+        abi, '0x438e039ebbba8f290f3b5d41aaf3295eccc9b5e6b0e1d52ace700772afb7da13'
+    ),
+    ValidParentEquippableGroupIdSet: new LogEvent<([equippableGroupId: ethers.BigNumber, slotPartId: ethers.BigNumber, parentAddress: string] & {equippableGroupId: ethers.BigNumber, slotPartId: ethers.BigNumber, parentAddress: string})>(
+        abi, '0x5b5af0622001a9b735a56357ddc1abd65e6a640126498674daf9d2fb05160725'
+    ),
     RMRKCollectionMetdataSet: new LogEvent<([metadataURI: string] & {metadataURI: string})>(
         abi, '0xe24e0da67950a0fc5259943c772616d26c33dcfc2fbbf029a88eaa1f6dcb2943'
     ),
@@ -29,8 +38,8 @@ export const events = {
     AssetAccepted: new LogEvent<([tokenId: ethers.BigNumber, assetId: ethers.BigNumber, replacedId: ethers.BigNumber] & {tokenId: ethers.BigNumber, assetId: ethers.BigNumber, replacedId: ethers.BigNumber})>(
         abi, '0x3f2709a99f6c06b4e57bbb38eb0134332f96f51a3da314f41a515adbb28b17cc'
     ),
-    AssetAddedToToken: new LogEvent<([tokenId: ethers.BigNumber, assetId: ethers.BigNumber, replacedId: ethers.BigNumber] & {tokenId: ethers.BigNumber, assetId: ethers.BigNumber, replacedId: ethers.BigNumber})>(
-        abi, '0xdd2a8327ccddc29216d9020f54bd7319cd5aec5d9cc4c1cb183695ef004e52e2'
+    AssetAddedToTokens: new LogEvent<([tokenIds: Array<ethers.BigNumber>, assetId: ethers.BigNumber, replacesId: ethers.BigNumber] & {tokenIds: Array<ethers.BigNumber>, assetId: ethers.BigNumber, replacesId: ethers.BigNumber})>(
+        abi, '0x4a85a0221f784dbe75db7c29c422f474c15bde9211a98e50a30018fa8dfa937b'
     ),
     AssetPrioritySet: new LogEvent<([tokenId: ethers.BigNumber] & {tokenId: ethers.BigNumber})>(
         abi, '0xf0bfd70b0068f973d58178846ca67112671ec45e060838f7de5662036bcf8017'
@@ -194,7 +203,7 @@ export const functions = {
     approveForAssets: new Func<[to: string, tokenId: ethers.BigNumber], {to: string, tokenId: ethers.BigNumber}, []>(
         abi, '0x5ea72f36'
     ),
-    getActiveAssetPriorities: new Func<[tokenId: ethers.BigNumber], {tokenId: ethers.BigNumber}, Array<number>>(
+    getActiveAssetPriorities: new Func<[tokenId: ethers.BigNumber], {tokenId: ethers.BigNumber}, Array<ethers.BigNumber>>(
         abi, '0x5e94354a'
     ),
     getActiveAssets: new Func<[tokenId: ethers.BigNumber], {tokenId: ethers.BigNumber}, Array<ethers.BigNumber>>(
@@ -236,8 +245,8 @@ export const functions = {
     setApprovalForAllForAssets: new Func<[operator: string, approved: boolean], {operator: string, approved: boolean}, []>(
         abi, '0x8507dc28'
     ),
-    setPriority: new Func<[tokenId: ethers.BigNumber, priorities: Array<number>], {tokenId: ethers.BigNumber, priorities: Array<number>}, []>(
-        abi, '0x096835be'
+    setPriority: new Func<[tokenId: ethers.BigNumber, priorities: Array<ethers.BigNumber>], {tokenId: ethers.BigNumber, priorities: Array<ethers.BigNumber>}, []>(
+        abi, '0xde8e602c'
     ),
     tokenURI: new Func<[tokenId: ethers.BigNumber], {tokenId: ethers.BigNumber}, string>(
         abi, '0xc87b56dd'
@@ -281,6 +290,33 @@ export const functions = {
     'removeSlotEquipments(uint256,uint64,uint64[])': new Func<[tokenId: ethers.BigNumber, catalogRelatedAssetId: ethers.BigNumber, slotIds: Array<ethers.BigNumber>], {tokenId: ethers.BigNumber, catalogRelatedAssetId: ethers.BigNumber, slotIds: Array<ethers.BigNumber>}, []>(
         abi, '0xc7926e95'
     ),
+    _canTokenBeEquippedWithAssetIntoSlot: new Func<[parent: string, tokenId: ethers.BigNumber, assetId: ethers.BigNumber, slotId: ethers.BigNumber], {parent: string, tokenId: ethers.BigNumber, assetId: ethers.BigNumber, slotId: ethers.BigNumber}, boolean>(
+        abi, '0x0495738f'
+    ),
+    _getAssetAndEquippableData: new Func<[_: ethers.BigNumber, assetId: ethers.BigNumber], {assetId: ethers.BigNumber}, [_: string, _: ethers.BigNumber, _: string, _: Array<ethers.BigNumber>]>(
+        abi, '0xcb049511'
+    ),
+    _getEquipment: new Func<[tokenId: ethers.BigNumber, targetCatalogAddress: string, slotPartId: ethers.BigNumber], {tokenId: ethers.BigNumber, targetCatalogAddress: string, slotPartId: ethers.BigNumber}, ([assetId: ethers.BigNumber, childAssetId: ethers.BigNumber, childId: ethers.BigNumber, childEquippableAddress: string] & {assetId: ethers.BigNumber, childAssetId: ethers.BigNumber, childId: ethers.BigNumber, childEquippableAddress: string})>(
+        abi, '0xe2cc6746'
+    ),
+    canTokenBeEquippedWithAssetIntoSlot: new Func<[parent: string, tokenId: ethers.BigNumber, assetId: ethers.BigNumber, slotId: ethers.BigNumber], {parent: string, tokenId: ethers.BigNumber, assetId: ethers.BigNumber, slotId: ethers.BigNumber}, boolean>(
+        abi, '0x074334fb'
+    ),
+    equip: new Func<[data: ([tokenId: ethers.BigNumber, childIndex: ethers.BigNumber, assetId: ethers.BigNumber, slotPartId: ethers.BigNumber, childAssetId: ethers.BigNumber] & {tokenId: ethers.BigNumber, childIndex: ethers.BigNumber, assetId: ethers.BigNumber, slotPartId: ethers.BigNumber, childAssetId: ethers.BigNumber})], {data: ([tokenId: ethers.BigNumber, childIndex: ethers.BigNumber, assetId: ethers.BigNumber, slotPartId: ethers.BigNumber, childAssetId: ethers.BigNumber] & {tokenId: ethers.BigNumber, childIndex: ethers.BigNumber, assetId: ethers.BigNumber, slotPartId: ethers.BigNumber, childAssetId: ethers.BigNumber})}, []>(
+        abi, '0x38dcf74c'
+    ),
+    getAssetAndEquippableData: new Func<[tokenId: ethers.BigNumber, assetId: ethers.BigNumber], {tokenId: ethers.BigNumber, assetId: ethers.BigNumber}, [_: string, _: ethers.BigNumber, _: string, _: Array<ethers.BigNumber>]>(
+        abi, '0x4e60edba'
+    ),
+    getEquipment: new Func<[tokenId: ethers.BigNumber, targetCatalogAddress: string, slotPartId: ethers.BigNumber], {tokenId: ethers.BigNumber, targetCatalogAddress: string, slotPartId: ethers.BigNumber}, ([assetId: ethers.BigNumber, childAssetId: ethers.BigNumber, childId: ethers.BigNumber, childEquippableAddress: string] & {assetId: ethers.BigNumber, childAssetId: ethers.BigNumber, childId: ethers.BigNumber, childEquippableAddress: string})>(
+        abi, '0x7507e2ae'
+    ),
+    isChildEquipped: new Func<[tokenId: ethers.BigNumber, childAddress: string, childId: ethers.BigNumber], {tokenId: ethers.BigNumber, childAddress: string, childId: ethers.BigNumber}, boolean>(
+        abi, '0xee1dffcf'
+    ),
+    unequip: new Func<[tokenId: ethers.BigNumber, assetId: ethers.BigNumber, slotPartId: ethers.BigNumber], {tokenId: ethers.BigNumber, assetId: ethers.BigNumber, slotPartId: ethers.BigNumber}, []>(
+        abi, '0xc259a988'
+    ),
     collectionMetadata: new Func<[], {}, string>(
         abi, '0x89ed2edf'
     ),
@@ -317,13 +353,19 @@ export const functions = {
     revokeRole: new Func<[role: string, account: string], {role: string, account: string}, []>(
         abi, '0xd547741f'
     ),
+    royaltyInfo: new Func<[tokenId: ethers.BigNumber, salePrice: ethers.BigNumber], {tokenId: ethers.BigNumber, salePrice: ethers.BigNumber}, [_: string, _: ethers.BigNumber]>(
+        abi, '0x2a55205a'
+    ),
     setCollectionMetadata: new Func<[newMetadata: string], {newMetadata: string}, []>(
         abi, '0x19660839'
+    ),
+    setCollectionOwner: new Func<[target: string], {target: string}, []>(
+        abi, '0x098f9cf3'
     ),
     setFallbackURI: new Func<[fallbackURI: string], {fallbackURI: string}, []>(
         abi, '0x18249af7'
     ),
-    getMintConfig: new Func<[], {}, ([whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number] & {whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number})>(
+    getMintConfig: new Func<[], {}, ([whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, maxSupply: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number] & {whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, maxSupply: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number})>(
         abi, '0x9338bb5d'
     ),
     getMintPermissions: new Func<[], {}, ([allowPublicMint: boolean, allowWhitelistMint: boolean] & {allowPublicMint: boolean, allowWhitelistMint: boolean})>(
@@ -331,6 +373,9 @@ export const functions = {
     ),
     getWhitelistMerkleProofRoot: new Func<[], {}, string>(
         abi, '0x6d9a7f07'
+    ),
+    maxSupply: new Func<[], {}, ethers.BigNumber>(
+        abi, '0xd5abeb01'
     ),
     'mint()': new Func<[], {}, []>(
         abi, '0x1249c58b'
@@ -428,7 +473,7 @@ export class Contract extends ContractBase {
         return this.eth_call(functions.symbol, [])
     }
 
-    getActiveAssetPriorities(tokenId: ethers.BigNumber): Promise<Array<number>> {
+    getActiveAssetPriorities(tokenId: ethers.BigNumber): Promise<Array<ethers.BigNumber>> {
         return this.eth_call(functions.getActiveAssetPriorities, [tokenId])
     }
 
@@ -512,6 +557,34 @@ export class Contract extends ContractBase {
         return this.eth_call(functions['getSlotEquipments(address,uint256)'], [childContract, childTokenId])
     }
 
+    _canTokenBeEquippedWithAssetIntoSlot(parent: string, tokenId: ethers.BigNumber, assetId: ethers.BigNumber, slotId: ethers.BigNumber): Promise<boolean> {
+        return this.eth_call(functions._canTokenBeEquippedWithAssetIntoSlot, [parent, tokenId, assetId, slotId])
+    }
+
+    _getAssetAndEquippableData(arg0: ethers.BigNumber, assetId: ethers.BigNumber): Promise<[_: string, _: ethers.BigNumber, _: string, _: Array<ethers.BigNumber>]> {
+        return this.eth_call(functions._getAssetAndEquippableData, [arg0, assetId])
+    }
+
+    _getEquipment(tokenId: ethers.BigNumber, targetCatalogAddress: string, slotPartId: ethers.BigNumber): Promise<([assetId: ethers.BigNumber, childAssetId: ethers.BigNumber, childId: ethers.BigNumber, childEquippableAddress: string] & {assetId: ethers.BigNumber, childAssetId: ethers.BigNumber, childId: ethers.BigNumber, childEquippableAddress: string})> {
+        return this.eth_call(functions._getEquipment, [tokenId, targetCatalogAddress, slotPartId])
+    }
+
+    canTokenBeEquippedWithAssetIntoSlot(parent: string, tokenId: ethers.BigNumber, assetId: ethers.BigNumber, slotId: ethers.BigNumber): Promise<boolean> {
+        return this.eth_call(functions.canTokenBeEquippedWithAssetIntoSlot, [parent, tokenId, assetId, slotId])
+    }
+
+    getAssetAndEquippableData(tokenId: ethers.BigNumber, assetId: ethers.BigNumber): Promise<[_: string, _: ethers.BigNumber, _: string, _: Array<ethers.BigNumber>]> {
+        return this.eth_call(functions.getAssetAndEquippableData, [tokenId, assetId])
+    }
+
+    getEquipment(tokenId: ethers.BigNumber, targetCatalogAddress: string, slotPartId: ethers.BigNumber): Promise<([assetId: ethers.BigNumber, childAssetId: ethers.BigNumber, childId: ethers.BigNumber, childEquippableAddress: string] & {assetId: ethers.BigNumber, childAssetId: ethers.BigNumber, childId: ethers.BigNumber, childEquippableAddress: string})> {
+        return this.eth_call(functions.getEquipment, [tokenId, targetCatalogAddress, slotPartId])
+    }
+
+    isChildEquipped(tokenId: ethers.BigNumber, childAddress: string, childId: ethers.BigNumber): Promise<boolean> {
+        return this.eth_call(functions.isChildEquipped, [tokenId, childAddress, childId])
+    }
+
     collectionMetadata(): Promise<string> {
         return this.eth_call(functions.collectionMetadata, [])
     }
@@ -532,7 +605,11 @@ export class Contract extends ContractBase {
         return this.eth_call(functions.hasRole, [role, account])
     }
 
-    getMintConfig(): Promise<([whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number] & {whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number})> {
+    royaltyInfo(tokenId: ethers.BigNumber, salePrice: ethers.BigNumber): Promise<[_: string, _: ethers.BigNumber]> {
+        return this.eth_call(functions.royaltyInfo, [tokenId, salePrice])
+    }
+
+    getMintConfig(): Promise<([whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, maxSupply: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number] & {whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, maxSupply: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number})> {
         return this.eth_call(functions.getMintConfig, [])
     }
 
@@ -542,6 +619,10 @@ export class Contract extends ContractBase {
 
     getWhitelistMerkleProofRoot(): Promise<string> {
         return this.eth_call(functions.getWhitelistMerkleProofRoot, [])
+    }
+
+    maxSupply(): Promise<ethers.BigNumber> {
+        return this.eth_call(functions.maxSupply, [])
     }
 
     totalSupply(): Promise<ethers.BigNumber> {

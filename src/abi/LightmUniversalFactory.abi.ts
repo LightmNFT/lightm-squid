@@ -41,6 +41,10 @@ export const ABI_JSON = [
                     },
                     {
                         "type": "address",
+                        "name": "rmrkEquippableFacetAddress"
+                    },
+                    {
+                        "type": "address",
                         "name": "collectionMetadataFacetAddress"
                     },
                     {
@@ -90,6 +94,11 @@ export const ABI_JSON = [
             {
                 "type": "address",
                 "name": "owner",
+                "indexed": true
+            },
+            {
+                "type": "bool",
+                "name": "hasCustomCuts",
                 "indexed": true
             }
         ]
@@ -178,6 +187,10 @@ export const ABI_JSON = [
                         "name": "collectionMetadataURI"
                     },
                     {
+                        "type": "uint96",
+                        "name": "royaltyNumerator"
+                    },
+                    {
                         "type": "tuple",
                         "name": "mintConfig",
                         "components": [
@@ -188,6 +201,10 @@ export const ABI_JSON = [
                             {
                                 "type": "uint256",
                                 "name": "publicMintPrice"
+                            },
+                            {
+                                "type": "uint256",
+                                "name": "maxSupply"
                             },
                             {
                                 "type": "uint64",
@@ -202,6 +219,24 @@ export const ABI_JSON = [
                                 "name": "mintStyle"
                             }
                         ]
+                    }
+                ]
+            },
+            {
+                "type": "tuple[]",
+                "name": "customCuts",
+                "components": [
+                    {
+                        "type": "address",
+                        "name": "facetAddress"
+                    },
+                    {
+                        "type": "uint8",
+                        "name": "action"
+                    },
+                    {
+                        "type": "bytes4[]",
+                        "name": "functionSelectors"
                     }
                 ]
             }
@@ -302,6 +337,19 @@ export const ABI_JSON = [
     {
         "type": "function",
         "name": "nestableFacetAddress",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+            {
+                "type": "address"
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "rmrkEquippableFacetAddress",
         "constant": true,
         "stateMutability": "view",
         "payable": false,

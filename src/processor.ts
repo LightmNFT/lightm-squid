@@ -27,7 +27,7 @@ import { getAddress } from "ethers/lib/utils";
 const isDev = process.env.NODE_ENV === "development";
 
 const FACTORY_ADDRESS = "0x673CEAAC3608BF5432723b3d05ceF41791aB0b84";
-const FACTORY_ADDRESS_LOCAL = "0x673CEAAC3608BF5432723b3d05ceF41791aB0b84";
+const FACTORY_ADDRESS_LOCAL = "0x9b95982ff426d30225925c26A3Ca1f868791d73E";
 
 const START_BLOCK = 3_650_000;
 const START_BLOCK_LOCAL = 0;
@@ -222,6 +222,7 @@ async function handleCollectionCreated(
     totalSupply: 0n,
     createAtBlock: BigInt(header.height),
     transactionHash: item.transaction.hash,
+    hasCustomCuts: data.hasCustomCuts,
   });
 
   await ctx.store.save(owner);

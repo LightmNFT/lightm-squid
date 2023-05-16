@@ -35,6 +35,9 @@ export class Collection {
     @Column_("text", {nullable: false})
     transactionHash!: string
 
+    @Column_("bool", {nullable: false})
+    hasCustomCuts!: boolean
+
     @OneToMany_(() => Token, e => e.collection)
     tokens!: Token[]
 

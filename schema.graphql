@@ -19,6 +19,7 @@ type Collection @entity {
   totalSupply: BigInt
   createAtBlock: BigInt!
   transactionHash: String!
+  hasCustomCuts: Boolean!
   tokens: [Token!]! @derivedFrom(field: "collection")
   assetEntries: [AssetEntry!]! @derivedFrom(field: "collection")
 }

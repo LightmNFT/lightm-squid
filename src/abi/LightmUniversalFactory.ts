@@ -5,8 +5,8 @@ import {ABI_JSON} from './LightmUniversalFactory.abi'
 export const abi = new ethers.utils.Interface(ABI_JSON);
 
 export const events = {
-    LightmCollectionCreated: new LogEvent<([collectionAddress: string, owner: string] & {collectionAddress: string, owner: string})>(
-        abi, '0x8c7cf41550332d6435d1cf344cd12fadfcd22eed7dd46ac73177131dfd058dde'
+    LightmCollectionCreated: new LogEvent<([collectionAddress: string, owner: string, hasCustomCuts: boolean] & {collectionAddress: string, owner: string, hasCustomCuts: boolean})>(
+        abi, '0xcd8dab068effdb86b2f7a1835a958f1d2e37073eaabf441205f57580d1946411'
     ),
 }
 
@@ -20,8 +20,8 @@ export const functions = {
     deployCatalog: new Func<[metadataURI: string, type_: string], {metadataURI: string, type_: string}, []>(
         abi, '0xa3911df1'
     ),
-    deployCollection: new Func<[initStruct: ([name: string, symbol: string, fallbackURI: string, collectionMetadataURI: string, mintConfig: ([whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number] & {whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number})] & {name: string, symbol: string, fallbackURI: string, collectionMetadataURI: string, mintConfig: ([whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number] & {whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number})})], {initStruct: ([name: string, symbol: string, fallbackURI: string, collectionMetadataURI: string, mintConfig: ([whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number] & {whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number})] & {name: string, symbol: string, fallbackURI: string, collectionMetadataURI: string, mintConfig: ([whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number] & {whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number})})}, []>(
-        abi, '0xf66fa4d4'
+    deployCollection: new Func<[initStruct: ([name: string, symbol: string, fallbackURI: string, collectionMetadataURI: string, royaltyNumerator: ethers.BigNumber, mintConfig: ([whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, maxSupply: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number] & {whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, maxSupply: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number})] & {name: string, symbol: string, fallbackURI: string, collectionMetadataURI: string, royaltyNumerator: ethers.BigNumber, mintConfig: ([whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, maxSupply: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number] & {whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, maxSupply: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number})}), customCuts: Array<([facetAddress: string, action: number, functionSelectors: Array<string>] & {facetAddress: string, action: number, functionSelectors: Array<string>})>], {initStruct: ([name: string, symbol: string, fallbackURI: string, collectionMetadataURI: string, royaltyNumerator: ethers.BigNumber, mintConfig: ([whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, maxSupply: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number] & {whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, maxSupply: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number})] & {name: string, symbol: string, fallbackURI: string, collectionMetadataURI: string, royaltyNumerator: ethers.BigNumber, mintConfig: ([whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, maxSupply: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number] & {whitelistMintPrice: ethers.BigNumber, publicMintPrice: ethers.BigNumber, maxSupply: ethers.BigNumber, whitelistMintLimit: ethers.BigNumber, publicMintLimit: ethers.BigNumber, mintStyle: number})}), customCuts: Array<([facetAddress: string, action: number, functionSelectors: Array<string>] & {facetAddress: string, action: number, functionSelectors: Array<string>})>}, []>(
+        abi, '0xb7d3a55e'
     ),
     equippableFacetAddress: new Func<[], {}, string>(
         abi, '0xdb9f510c'
@@ -46,6 +46,9 @@ export const functions = {
     ),
     nestableFacetAddress: new Func<[], {}, string>(
         abi, '0x04f2d1e1'
+    ),
+    rmrkEquippableFacetAddress: new Func<[], {}, string>(
+        abi, '0x59162718'
     ),
     validatorLibAddress: new Func<[], {}, string>(
         abi, '0xbaaed0c9'
@@ -95,6 +98,10 @@ export class Contract extends ContractBase {
 
     nestableFacetAddress(): Promise<string> {
         return this.eth_call(functions.nestableFacetAddress, [])
+    }
+
+    rmrkEquippableFacetAddress(): Promise<string> {
+        return this.eth_call(functions.rmrkEquippableFacetAddress, [])
     }
 
     validatorLibAddress(): Promise<string> {

@@ -45,6 +45,11 @@
           },
           {
             "internalType": "address",
+            "name": "rmrkEquippableFacetAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
             "name": "collectionMetadataFacetAddress",
             "type": "address"
           },
@@ -108,6 +113,12 @@
         "internalType": "address",
         "name": "owner",
         "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bool",
+        "name": "hasCustomCuts",
+        "type": "bool"
       }
     ],
     "name": "LightmCollectionCreated",
@@ -199,6 +210,11 @@
             "type": "string"
           },
           {
+            "internalType": "uint96",
+            "name": "royaltyNumerator",
+            "type": "uint96"
+          },
+          {
             "components": [
               {
                 "internalType": "uint256",
@@ -208,6 +224,11 @@
               {
                 "internalType": "uint256",
                 "name": "publicMintPrice",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "maxSupply",
                 "type": "uint256"
               },
               {
@@ -234,6 +255,28 @@
         "internalType": "struct LightmInit.InitStruct",
         "name": "initStruct",
         "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "facetAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "enum IDiamondCut.FacetCutAction",
+            "name": "action",
+            "type": "uint8"
+          },
+          {
+            "internalType": "bytes4[]",
+            "name": "functionSelectors",
+            "type": "bytes4[]"
+          }
+        ],
+        "internalType": "struct IDiamondCut.FacetCut[]",
+        "name": "customCuts",
+        "type": "tuple[]"
       }
     ],
     "name": "deployCollection",
@@ -335,6 +378,19 @@
   {
     "inputs": [],
     "name": "nestableFacetAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "rmrkEquippableFacetAddress",
     "outputs": [
       {
         "internalType": "address",
