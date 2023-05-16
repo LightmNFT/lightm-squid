@@ -26,10 +26,10 @@ import { getAddress } from "ethers/lib/utils";
 
 const isDev = process.env.NODE_ENV === "development";
 
-const FACTORY_ADDRESS = "0x673CEAAC3608BF5432723b3d05ceF41791aB0b84";
+const FACTORY_ADDRESS = "0x9b95982ff426d30225925c26A3Ca1f868791d73E";
 const FACTORY_ADDRESS_LOCAL = "0x9b95982ff426d30225925c26A3Ca1f868791d73E";
 
-const START_BLOCK = 3_650_000;
+const START_BLOCK = 3_496_000;
 const START_BLOCK_LOCAL = 0;
 
 const factoryContractAddress = (
@@ -53,7 +53,7 @@ const processor = new EvmBatchProcessor()
   .setDataSource({
     // uncomment and set RPC_ENDPOONT to enable contract state queries.
     // Both https and wss endpoints are supported.
-    chain: !isDev ? process.env.RPC_ENDPOINT : process.env.RPC_ENDPOINT_LOCAL,
+    chain: !isDev ? process.env.RPC_ENDPOINT_SEPOLIA : process.env.RPC_ENDPOINT_LOCAL,
 
     // Change the Archive endpoints for run the squid
     // against the other EVM networks
@@ -61,7 +61,7 @@ const processor = new EvmBatchProcessor()
     // see https://docs.subsquid.io/develop-a-squid/evm-processor/configuration/
 
     archive: !isDev
-      ? lookupArchive("moonbase", { type: "EVM" })
+      ? lookupArchive("sepolia", { type: "EVM" })
       : "http://localhost:8080",
   })
   .setBlockRange({ from: !isDev ? START_BLOCK : START_BLOCK_LOCAL })

@@ -1,13 +1,13 @@
 manifestVersion: subsquid.io/v0.1
-name: lightm-nft-squid
+name: lightm-nft-squid-sepolia
 version: 1
 description: |-
-  The squid for lightm NFTs
+  The squid for lightm NFTs on sepolia
 build:
 
 deploy:
   secrets:
-    - RPC_ENDPOINT
+    - RPC_ENDPOINT_SEPOLIA
   addons:
     postgres:
   processor:
