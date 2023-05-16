@@ -1,5 +1,5 @@
-module.exports = class Data1676550884032 {
-    name = 'Data1676550884032'
+module.exports = class Data1684228784023 {
+    name = 'Data1684228784023'
 
     async up(db) {
         await db.query(`CREATE TABLE "transfer" ("id" character varying NOT NULL, "block" numeric NOT NULL, "timestamp" numeric NOT NULL, "transaction_hash" text NOT NULL, "token_id" character varying, "from_id" character varying, "to_id" character varying, CONSTRAINT "PK_fd9ddbdd49a17afcbe014401295" PRIMARY KEY ("id"))`)
@@ -17,7 +17,7 @@ module.exports = class Data1676550884032 {
         await db.query(`CREATE INDEX "IDX_65f74edd41f667e4645e59b61d" ON "token" ("collection_id") `)
         await db.query(`CREATE TABLE "asset_entry" ("id" character varying NOT NULL, "asset_id" numeric NOT NULL, "create_at_block" numeric NOT NULL, "transaction_hash" text NOT NULL, "collection_id" character varying, CONSTRAINT "PK_b7feae62265e6f22aa04e64fccb" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_15988d8f1c33b2274361ff1758" ON "asset_entry" ("collection_id") `)
-        await db.query(`CREATE TABLE "collection" ("id" character varying NOT NULL, "name" text, "symbol" text, "metadata_uri" text NOT NULL, "total_supply" numeric, "create_at_block" numeric NOT NULL, "transaction_hash" text NOT NULL, "owner_id" character varying, CONSTRAINT "PK_ad3f485bbc99d875491f44d7c85" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "collection" ("id" character varying NOT NULL, "name" text, "symbol" text, "metadata_uri" text NOT NULL, "total_supply" numeric, "create_at_block" numeric NOT NULL, "transaction_hash" text NOT NULL, "has_custom_cuts" boolean NOT NULL, "owner_id" character varying, CONSTRAINT "PK_ad3f485bbc99d875491f44d7c85" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_01d689ecc7eba32eaf962ad9d9" ON "collection" ("owner_id") `)
         await db.query(`CREATE TABLE "part" ("id" character varying NOT NULL, "part_id" numeric NOT NULL, "item_type" integer NOT NULL, "z_index" integer NOT NULL, "metadata_uri" text NOT NULL, "equippable_addresses" text array NOT NULL, "equippable_to_all" boolean NOT NULL, "create_at_block" numeric NOT NULL, "transaction_hash" text NOT NULL, "catalog_id" character varying, CONSTRAINT "PK_58888debdf048d2dfe459aa59da" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_168ec406bc2bda547b2650265a" ON "part" ("catalog_id") `)
