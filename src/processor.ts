@@ -21,7 +21,7 @@ import {
   Token,
   Transfer,
 } from "./model";
-import { constants } from "ethers";
+import { Contract, constants, providers } from "ethers";
 import { getAddress } from "ethers/lib/utils";
 
 const isDev = process.env.NODE_ENV === "development";
@@ -53,7 +53,9 @@ const processor = new EvmBatchProcessor()
   .setDataSource({
     // uncomment and set RPC_ENDPOONT to enable contract state queries.
     // Both https and wss endpoints are supported.
-    chain: !isDev ? process.env.RPC_ENDPOINT_SEPOLIA : process.env.RPC_ENDPOINT_LOCAL,
+    chain: !isDev
+      ? process.env.RPC_ENDPOINT_SEPOLIA
+      : process.env.RPC_ENDPOINT_LOCAL,
 
     // Change the Archive endpoints for run the squid
     // against the other EVM networks
@@ -204,10 +206,10 @@ async function handleCollectionCreated(
 
   owner.collectionBalance += 1n;
 
-  const collectionContract = new lightmCollection.Contract(
-    ctx,
-    header,
-    data.collectionAddress
+  const collectionContract = new Contract(
+    data.collectionAddress,
+    lightmCollection.abi,
+    new providers.JsonRpcProvider(process.env.RPC_ENDPOINT_SEPOLIA)
   );
 
   const name = await collectionContract.name();
