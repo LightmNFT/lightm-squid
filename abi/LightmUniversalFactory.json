@@ -117,8 +117,48 @@
       {
         "indexed": true,
         "internalType": "bool",
-        "name": "hasCustomCuts",
+        "name": "isCustomized",
         "type": "bool"
+      },
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "facetAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "enum IDiamondCut.FacetCutAction",
+                "name": "action",
+                "type": "uint8"
+              },
+              {
+                "internalType": "bytes4[]",
+                "name": "functionSelectors",
+                "type": "bytes4[]"
+              }
+            ],
+            "internalType": "struct IDiamondCut.FacetCut[]",
+            "name": "cuts",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "address",
+            "name": "initAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "initCallData",
+            "type": "bytes"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct ILightmUniversalFactory.CustomInitStruct",
+        "name": "customInitStruct",
+        "type": "tuple"
       }
     ],
     "name": "LightmCollectionCreated",
@@ -259,24 +299,41 @@
       {
         "components": [
           {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "facetAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "enum IDiamondCut.FacetCutAction",
+                "name": "action",
+                "type": "uint8"
+              },
+              {
+                "internalType": "bytes4[]",
+                "name": "functionSelectors",
+                "type": "bytes4[]"
+              }
+            ],
+            "internalType": "struct IDiamondCut.FacetCut[]",
+            "name": "cuts",
+            "type": "tuple[]"
+          },
+          {
             "internalType": "address",
-            "name": "facetAddress",
+            "name": "initAddress",
             "type": "address"
           },
           {
-            "internalType": "enum IDiamondCut.FacetCutAction",
-            "name": "action",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes4[]",
-            "name": "functionSelectors",
-            "type": "bytes4[]"
+            "internalType": "bytes",
+            "name": "initCallData",
+            "type": "bytes"
           }
         ],
-        "internalType": "struct IDiamondCut.FacetCut[]",
-        "name": "customCuts",
-        "type": "tuple[]"
+        "internalType": "struct ILightmUniversalFactory.CustomInitStruct",
+        "name": "customInitStruct",
+        "type": "tuple"
       }
     ],
     "name": "deployCollection",

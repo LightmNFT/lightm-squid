@@ -98,8 +98,41 @@ export const ABI_JSON = [
             },
             {
                 "type": "bool",
-                "name": "hasCustomCuts",
+                "name": "isCustomized",
                 "indexed": true
+            },
+            {
+                "type": "tuple",
+                "name": "customInitStruct",
+                "indexed": false,
+                "components": [
+                    {
+                        "type": "tuple[]",
+                        "name": "cuts",
+                        "components": [
+                            {
+                                "type": "address",
+                                "name": "facetAddress"
+                            },
+                            {
+                                "type": "uint8",
+                                "name": "action"
+                            },
+                            {
+                                "type": "bytes4[]",
+                                "name": "functionSelectors"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "address",
+                        "name": "initAddress"
+                    },
+                    {
+                        "type": "bytes",
+                        "name": "initCallData"
+                    }
+                ]
             }
         ]
     },
@@ -223,20 +256,34 @@ export const ABI_JSON = [
                 ]
             },
             {
-                "type": "tuple[]",
-                "name": "customCuts",
+                "type": "tuple",
+                "name": "customInitStruct",
                 "components": [
                     {
+                        "type": "tuple[]",
+                        "name": "cuts",
+                        "components": [
+                            {
+                                "type": "address",
+                                "name": "facetAddress"
+                            },
+                            {
+                                "type": "uint8",
+                                "name": "action"
+                            },
+                            {
+                                "type": "bytes4[]",
+                                "name": "functionSelectors"
+                            }
+                        ]
+                    },
+                    {
                         "type": "address",
-                        "name": "facetAddress"
+                        "name": "initAddress"
                     },
                     {
-                        "type": "uint8",
-                        "name": "action"
-                    },
-                    {
-                        "type": "bytes4[]",
-                        "name": "functionSelectors"
+                        "type": "bytes",
+                        "name": "initCallData"
                     }
                 ]
             }
