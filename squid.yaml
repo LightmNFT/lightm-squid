@@ -1,6 +1,6 @@
 manifestVersion: subsquid.io/v0.1
 name: lightm-nft-squid
-version: 1
+version: 2
 description: |-
   The squid for lightm NFTs
 build:

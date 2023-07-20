@@ -97,6 +97,11 @@ export const ABI_JSON = [
                 "indexed": true
             },
             {
+                "type": "bytes32",
+                "name": "salt",
+                "indexed": false
+            },
+            {
                 "type": "bool",
                 "name": "isCustomized",
                 "indexed": true
@@ -199,6 +204,10 @@ export const ABI_JSON = [
         "constant": false,
         "payable": false,
         "inputs": [
+            {
+                "type": "bytes32",
+                "name": "salt"
+            },
             {
                 "type": "tuple",
                 "name": "initStruct",
